@@ -1,5 +1,6 @@
 package cakir.test_driven_design_wallet_api;
 
+import cakir.test_driven_design_wallet_api.controller.WalletController;
 import cakir.test_driven_design_wallet_api.model.dto.WalletDTO;
 import cakir.test_driven_design_wallet_api.model.entity.Wallet;
 import cakir.test_driven_design_wallet_api.service.WalletService;
@@ -46,7 +47,7 @@ class WalletControllerTest {
 
         when(walletService.createWallet(any(WalletDTO.class))).thenReturn(mockWallet);
 
-        mockMvc.perform(post("/api/v1/wallets")
+        mockMvc.perform(post("/api/v1/wallets/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
