@@ -93,4 +93,38 @@ class WalletServiceTest {
                 .hasMessage("Deposit amount must be positive");
     }
 
+
+    /**
+     * Red Test: before implementing the withdraw functionality, this test will fail.
+     */
+    @Test
+    void shouldWithdrawMoneySuccessfully(){
+        Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
+        BigDecimal withdrawAmount = new BigDecimal(50);
+
+        Wallet updatedWallet = walletService.withdraw(wallet, withdrawAmount);
+
+        assertThat(updatedWallet.getBalance()).isEqualTo(new BigDecimal(50));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenWithdrawAmountIsNegative(){
+        Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
+        BigDecimal withdrawAmount = new BigDecimal(-50);
+
+        assertThatThrownBy(() -> walletService.withdraw(wallet, withdrawAmount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Withdraw amount must be positive");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenWithdrawAmountExceedsBalance() {
+        Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
+        BigDecimal withdrawAmount = new BigDecimal(150);
+
+        assertThatThrownBy(() -> walletService.withdraw(wallet, withdrawAmount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Insufficient balance");
+    }
+
 }
