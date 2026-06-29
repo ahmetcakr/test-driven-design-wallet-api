@@ -2,19 +2,29 @@ package cakir.test_driven_design_wallet_api;
 
 import cakir.test_driven_design_wallet_api.model.dto.WalletDTO;
 import cakir.test_driven_design_wallet_api.model.entity.Wallet;
-import cakir.test_driven_design_wallet_api.service.WalletService;
+import cakir.test_driven_design_wallet_api.repository.WalletRepository;
+import cakir.test_driven_design_wallet_api.service.impl.WalletServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class WalletServiceTest {
 
-    private final WalletService walletService = new WalletService();
+    @Mock
+    private WalletRepository walletRepository;
+
+    @InjectMocks
+    private WalletServiceImpl walletService;
 
 //    /**
 //     * Red Test: WalletService is not implemented yet, so this test will fail.
@@ -30,19 +40,21 @@ class WalletServiceTest {
 //        assertThat(response.getUserId()).isEqualTo("user111");
 //    }
 
-
     /**
      * Green Test: after implementing the WalletService, this test will pass.
      */
     @Test
     void shouldCreateWalletWithZeroBalance(){
-        WalletService walletService = new WalletService();
         WalletDTO request = new WalletDTO("user111");
+        Wallet savedWallet = new Wallet("wallet123", "user111", BigDecimal.ZERO);
+
+        when(walletRepository.save(any(Wallet.class))).thenReturn(savedWallet);
 
         Wallet response = walletService.createWallet(request);
 
         assertThat(response.getBalance()).isEqualTo(BigDecimal.ZERO);
         assertThat(response.getUserId()).isEqualTo("user111");
+        assertThat(response.getId()).isNotNull();
     }
 
 
@@ -77,6 +89,8 @@ class WalletServiceTest {
     void shouldDepositMoneySuccessfully(){
         Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
         BigDecimal depositAmount = new BigDecimal(50);
+
+        when(walletRepository.save(any(Wallet.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Wallet updatedWallet = walletService.deposit(wallet, depositAmount);
 
@@ -134,6 +148,8 @@ class WalletServiceTest {
     void shouldWithdrawMoneySuccessfully(){
         Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
         BigDecimal withdrawAmount = new BigDecimal(50);
+
+        when(walletRepository.save(any(Wallet.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Wallet updatedWallet = walletService.withdraw(wallet, withdrawAmount);
 

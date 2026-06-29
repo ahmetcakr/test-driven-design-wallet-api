@@ -5,32 +5,11 @@ import cakir.test_driven_design_wallet_api.model.entity.Wallet;
 
 import java.math.BigDecimal;
 
-public class WalletService {
-    public Wallet createWallet(WalletDTO request) {
-        return new Wallet("wallet-id", request.getUserId(), BigDecimal.ZERO);
-    }
+public interface WalletService {
 
-    public Wallet deposit(Wallet wallet, BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Deposit amount must be positive");
-        }
+    Wallet createWallet(WalletDTO request);
 
-        BigDecimal newBalance = wallet.getBalance().add(amount);
-        wallet.setBalance(newBalance);
-        return wallet;
-    }
+    Wallet deposit(Wallet wallet, BigDecimal amount);
 
-    public Wallet withdraw(Wallet wallet, BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Withdraw amount must be positive");
-        }
-
-        if (wallet.getBalance().compareTo(amount) < 0) {
-            throw new IllegalArgumentException("Insufficient balance");
-        }
-
-        BigDecimal newBalance = wallet.getBalance().subtract(amount);
-        wallet.setBalance(newBalance);
-        return wallet;
-    }
+    Wallet withdraw(Wallet wallet, BigDecimal amount);
 }
