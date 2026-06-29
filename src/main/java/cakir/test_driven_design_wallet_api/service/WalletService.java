@@ -19,4 +19,18 @@ public class WalletService {
         wallet.setBalance(newBalance);
         return wallet;
     }
+
+    public Wallet withdraw(Wallet wallet, BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Withdraw amount must be positive");
+        }
+
+        if (wallet.getBalance().compareTo(amount) < 0) {
+            throw new IllegalArgumentException("Insufficient balance");
+        }
+
+        BigDecimal newBalance = wallet.getBalance().subtract(amount);
+        wallet.setBalance(newBalance);
+        return wallet;
+    }
 }
