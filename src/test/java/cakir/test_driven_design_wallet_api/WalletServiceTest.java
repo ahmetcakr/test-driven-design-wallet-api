@@ -46,8 +46,32 @@ class WalletServiceTest {
     }
 
 
+//    /**
+//     * Red Test: Deposit functionality is not implemented yet, so this test will fail.
+//     */
+//    @Test
+//    void shouldDepositMoneySuccessfully(){
+//        Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
+//        BigDecimal depositAmount = new BigDecimal(50);
+//
+//        Wallet updatedWallet = walletService.deposit(wallet, depositAmount);
+//
+//        assertThat(updatedWallet.getBalance()).isEqualTo(new BigDecimal(150));
+//    }
+//
+//    @Test
+//    void shouldThrowExceptionWhenDepositAmountIsNegative(){
+//        Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
+//        BigDecimal depositAmount = new BigDecimal(-50);
+//
+//        assertThatThrownBy(() -> walletService.deposit(wallet, depositAmount))
+//                .isInstanceOf(IllegalArgumentException.class)
+//                .hasMessage("Deposit amount must be positive");
+//    }
+
+
     /**
-     * Red Test: Deposit functionality is not implemented yet, so this test will fail.
+     * Green Test: after implementing the deposit functionality, this test will pass.
      */
     @Test
     void shouldDepositMoneySuccessfully(){
@@ -68,6 +92,5 @@ class WalletServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Deposit amount must be positive");
     }
-
 
 }

@@ -9,4 +9,14 @@ public class WalletService {
     public Wallet createWallet(WalletDTO request) {
         return new Wallet("wallet-id", request.getUserId(), BigDecimal.ZERO);
     }
+
+    public Wallet deposit(Wallet wallet, BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be positive");
+        }
+
+        BigDecimal newBalance = wallet.getBalance().add(amount);
+        wallet.setBalance(newBalance);
+        return wallet;
+    }
 }
