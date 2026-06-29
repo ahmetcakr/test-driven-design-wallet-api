@@ -9,9 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
 class WalletServiceTest {
+
+    private final WalletService walletService = new WalletService();
 
 //    /**
 //     * Red Test: WalletService is not implemented yet, so this test will fail.
@@ -41,4 +44,30 @@ class WalletServiceTest {
         assertThat(response.getBalance()).isEqualTo(BigDecimal.ZERO);
         assertThat(response.getUserId()).isEqualTo("user111");
     }
+
+
+    /**
+     * Red Test: Deposit functionality is not implemented yet, so this test will fail.
+     */
+    @Test
+    void shouldDepositMoneySuccessfully(){
+        Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
+        BigDecimal depositAmount = new BigDecimal(50);
+
+        Wallet updatedWallet = walletService.deposit(wallet, depositAmount);
+
+        assertThat(updatedWallet.getBalance()).isEqualTo(new BigDecimal(150));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDepositAmountIsNegative(){
+        Wallet wallet = new Wallet("wallet-id", "user111", new BigDecimal(100));
+        BigDecimal depositAmount = new BigDecimal(-50);
+
+        assertThatThrownBy(() -> walletService.deposit(wallet, depositAmount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Deposit amount must be positive");
+    }
+
+
 }
